@@ -207,6 +207,17 @@ header{display:grid;grid-template-columns:250px minmax(260px,1fr) 184px 200px;ga
 .evolution .evo-rule{flex:none;width:100%;max-width:none;margin:7px 0 0;line-height:1.8;white-space:normal;overflow-wrap:anywhere}
 .evolution-panel>.evo-note{margin-top:18px;line-height:1.8}
 @media(max-width:650px){.evo-level{flex:0 0 160px;min-width:160px}.evolution .evo-level button{flex-basis:160px;width:160px;padding:13px 10px}.evolution .evo-level button img{width:70px;height:70px}}
+
+/* A full-height desktop catalog with independent scrolling. */
+@media(min-width:651px){
+header{position:sticky;top:0;z-index:30}
+main>aside{position:sticky;top:var(--header-height,88px);align-self:start;height:calc(100dvh - var(--header-height,88px));max-height:none;min-height:0;display:flex;flex-direction:column;overflow:hidden;padding-top:22px;padding-bottom:16px}
+main>aside>*{flex-shrink:0}
+main>aside .aside-title{margin-top:8px;margin-bottom:16px}
+main>aside .catalog{flex:1 1 0;min-height:0;max-height:none;overflow-y:auto;overflow-x:hidden;align-content:start;overscroll-behavior:contain;scrollbar-gutter:stable}
+main>aside .catalog-footer{margin-top:auto;padding-top:12px}
+main>aside #status:empty{display:none}
+}
 </style></head><body>
 <header><div class="brand">POKÉ<b> / </b>FIELD<small>ЭНЦИКЛОПЕДИЯ ПОКЕМОНОВ</small></div><nav class="topnav" aria-label="Разделы"><button id="all" class="active">Покедекс</button><button id="saved">♡ Избранное <span id="fav-count">0</span></button></nav><div class="preferences"><button id="theme-toggle" class="slider-switch" role="switch" aria-checked="false" aria-label="Тёмная тема"><span aria-hidden="true">☀</span><span aria-hidden="true">☾</span></button><button id="language" class="slider-switch language-switch" role="switch" aria-checked="false" aria-label="English language"><span aria-hidden="true">RU</span><span aria-hidden="true">EN</span></button></div><span class="online">Полевой справочник / v.01</span></header>
 <main><aside><div class="eyebrow">Исследуй. Изучай. Открывай.</div><div class="aside-title"><h2>Покедекс</h2><span id="count" class="count"></span></div><input id="search" aria-label="Поиск покемона" placeholder="Поиск по имени или №…" type="search"><select id="filter" aria-label="Фильтр по типу"><option value="">Все типы</option value="grass">Травяной</option><option value="fire">Огненный</option><option value="water">Водный</option><option value="electric">Электрический</option><option value="psychic">Психический</option><option value="ghost">Призрачный</option><option value="normal">Обычный</option></select><select id="generation" aria-label="Поколение"></select><div id="catalog" class="catalog"></div><div class="catalog-footer"><span id="catalog-progress"></span><button id="load-more" type="button">Показать ещё</button></div><div id="status" class="status" role="status"></div></aside>
@@ -563,5 +574,14 @@ $('add-compare').onclick=()=>{addComparison(currentComparisonRef());openComparis
 $('compare-current').onclick=()=>addComparison(currentComparisonRef());$('compare-open').onclick=openComparison;$('compare-close').onclick=()=>$('compare-dialog').close();
 $('compare-clear').onclick=()=>{comparison=[];persistComparison();renderComparison();$('compare-search').focus()};$('compare-search').oninput=renderComparePicker;
 syncStatic();renderList();void select(current.id);comparison.forEach(entry=>void hydrateComparison(entry));
+
+
+function measureCatalogHeader(){
+const header=document.querySelector('header');if(!header||typeof header.getBoundingClientRect!=='function')return;
+document.documentElement.style.setProperty('--header-height',Math.ceil(header.getBoundingClientRect().height)+'px')
+}
+measureCatalogHeader();
+if(typeof ResizeObserver!=='undefined'){const catalogHeaderObserver=new ResizeObserver(measureCatalogHeader);catalogHeaderObserver.observe(document.querySelector('header'))}
+else if(typeof window!=='undefined')window.addEventListener('resize',measureCatalogHeader,{passive:true});
 
 </script></body></html>
