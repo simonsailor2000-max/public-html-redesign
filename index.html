@@ -93,6 +93,29 @@ aside .empty{color:#536d58}aside .status{color:#21613c}
 .evo-navigation button{padding:8px 12px;border-radius:9px;color:var(--accent)}
 .evo-navigation button:disabled{opacity:.35;cursor:default;border-color:var(--line)}
 @media(max-width:450px){.preferences{gap:6px}.preferences .slider-switch{width:76px;padding:3px}}
+
+/* Stable header tracks keep language changes from moving adjacent controls. */
+header{display:grid;grid-template-columns:250px minmax(260px,1fr) 184px 200px;gap:20px}
+.brand{min-width:0;white-space:nowrap}
+.brand small{height:14px;line-height:14px;white-space:nowrap}
+.topnav{display:grid;grid-template-columns:120px 150px;gap:8px;justify-content:center;min-width:0}
+.topnav button{white-space:nowrap}
+#fav-count{display:inline-block;min-width:2ch;text-align:center;font-variant-numeric:tabular-nums}
+.preferences{width:184px;justify-content:flex-end}
+.online{width:200px;white-space:nowrap}
+:root{--card-surface:linear-gradient(130deg,#fff,#edf2f9);--switch-label:#475a73;--switch-thumb:linear-gradient(#e1f5ff,#b8def2);--switch-selected:#123a53;--switch-border:#b4c4d8;--switch-shadow:#26395925}
+:root[data-theme=dark]{--card-surface:linear-gradient(130deg,#242d40,#1c2333);--switch-label:#bac5d9;--switch-thumb:linear-gradient(#455c78,#30435f);--switch-selected:#f1f8ff;--switch-border:#60748f;--switch-shadow:#070d1866}
+.panel,:root[data-theme=light] .panel{background:var(--card-surface)}
+.preferences .slider-switch,.preferences .slider-switch:hover{background:var(--card-surface);border-color:var(--switch-border);box-shadow:inset 0 1px 3px var(--switch-shadow),0 1px 0 #ffffff25}
+.preferences .slider-switch:hover{border-color:var(--accent)}
+.preferences .slider-switch:before{background:var(--switch-thumb);box-shadow:0 1px 4px var(--switch-shadow),inset 0 1px 0 #ffffff30}
+.preferences .slider-switch span{color:var(--switch-label)}
+.preferences .slider-switch[aria-checked=false] span:first-child,.preferences .slider-switch[aria-checked=true] span:last-child{color:var(--switch-selected)}
+@media(max-width:1190px) and (min-width:901px){header{grid-template-columns:250px minmax(270px,1fr) 184px}.online{display:none}}
+@media(max-width:900px){header{grid-template-columns:minmax(0,1fr) 184px;gap:12px;height:auto;min-height:88px}.brand{grid-column:1;grid-row:1}.preferences{grid-column:2;grid-row:1}.topnav{grid-column:1 / -1;grid-row:2;grid-template-columns:1fr 1fr;width:100%;order:initial}.online{display:none}}
+@media(max-width:450px){header{grid-template-columns:minmax(0,1fr) 158px}.preferences{width:158px}.topnav{gap:8px}}
+@media(max-width:380px){header{grid-template-columns:minmax(0,1fr) 134px;gap:8px;padding-left:14px;padding-right:14px}.brand{font-size:18px;padding-left:32px}.brand:before{width:20px;height:20px}.brand small{font-size:6px;letter-spacing:.5px}.preferences{width:134px}.preferences .slider-switch{width:64px}}
+
 </style></head><body>
 <header><div class="brand">POKÉ<b> / </b>FIELD<small>ЭНЦИКЛОПЕДИЯ ПОКЕМОНОВ</small></div><nav class="topnav" aria-label="Разделы"><button id="all" class="active">Покедекс</button><button id="saved">♡ Избранное <span id="fav-count">0</span></button></nav><div class="preferences"><button id="theme-toggle" class="slider-switch" role="switch" aria-checked="false" aria-label="Тёмная тема"><span aria-hidden="true">☀</span><span aria-hidden="true">☾</span></button><button id="language" class="slider-switch language-switch" role="switch" aria-checked="false" aria-label="English language"><span aria-hidden="true">RU</span><span aria-hidden="true">EN</span></button></div><span class="online">Полевой справочник / v.01</span></header>
 <main><aside><div class="eyebrow">Исследуй. Изучай. Открывай.</div><div class="aside-title"><h2>Покедекс</h2><span id="count" class="count"></span></div><input id="search" aria-label="Поиск покемона" placeholder="Поиск по имени или №…" type="search"><select id="filter" aria-label="Фильтр по типу"><option value="">Все типы</option value="grass">Травяной</option><option value="fire">Огненный</option><option value="water">Водный</option><option value="electric">Электрический</option><option value="psychic">Психический</option><option value="ghost">Призрачный</option><option value="normal">Обычный</option></select><div id="catalog" class="catalog"></div><div id="status" class="status" role="status"></div></aside>
