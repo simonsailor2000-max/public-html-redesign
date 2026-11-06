@@ -194,6 +194,19 @@ header{display:grid;grid-template-columns:250px minmax(260px,1fr) 184px 200px;ga
 #compare-table th,#compare-table td{width:170px;min-width:170px;padding:11px}#compare-table th:first-child{width:105px;min-width:105px;font-size:10px}
 .compare-art{width:90px;height:90px}.comparison-scroll{max-height:52dvh}.compare-tray{right:14px;bottom:calc(14px + env(safe-area-inset-bottom));padding:12px 16px}
 .compare-toolbar span{width:100%}.compare-toolbar button{flex:1}}
+
+/* Keep evolution captions inside naturally sized cards at every viewport width. */
+.evolution-panel{min-width:0}
+.evolution{align-items:flex-start;padding-bottom:12px}
+.evo-level{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:center;align-items:flex-start;align-content:flex-start;gap:14px;flex:1 1 0;min-width:180px}
+.evo-level-label{flex:0 0 100%;width:100%;margin-bottom:2px;text-align:center}
+.evolution .evo-level button{flex:0 1 220px;width:220px;max-width:100%;height:auto;min-height:0;align-self:flex-start;padding:16px 14px;display:flex;flex-direction:column;align-items:center;gap:5px;border:1px solid var(--line);background:#7bdaff06}
+.evolution .evo-level button[aria-pressed=true]{border-color:var(--accent);background:#7bdaff15}
+.evolution .evo-level button img{flex:none;width:80px;height:80px;margin:0 auto 5px}
+.evolution .evo-level button strong,.evolution .evo-level button small{max-width:100%;overflow-wrap:anywhere}
+.evolution .evo-rule{flex:none;width:100%;max-width:none;margin:7px 0 0;line-height:1.8;white-space:normal;overflow-wrap:anywhere}
+.evolution-panel>.evo-note{margin-top:18px;line-height:1.8}
+@media(max-width:650px){.evo-level{flex:0 0 160px;min-width:160px}.evolution .evo-level button{flex-basis:160px;width:160px;padding:13px 10px}.evolution .evo-level button img{width:70px;height:70px}}
 </style></head><body>
 <header><div class="brand">POKÉ<b> / </b>FIELD<small>ЭНЦИКЛОПЕДИЯ ПОКЕМОНОВ</small></div><nav class="topnav" aria-label="Разделы"><button id="all" class="active">Покедекс</button><button id="saved">♡ Избранное <span id="fav-count">0</span></button></nav><div class="preferences"><button id="theme-toggle" class="slider-switch" role="switch" aria-checked="false" aria-label="Тёмная тема"><span aria-hidden="true">☀</span><span aria-hidden="true">☾</span></button><button id="language" class="slider-switch language-switch" role="switch" aria-checked="false" aria-label="English language"><span aria-hidden="true">RU</span><span aria-hidden="true">EN</span></button></div><span class="online">Полевой справочник / v.01</span></header>
 <main><aside><div class="eyebrow">Исследуй. Изучай. Открывай.</div><div class="aside-title"><h2>Покедекс</h2><span id="count" class="count"></span></div><input id="search" aria-label="Поиск покемона" placeholder="Поиск по имени или №…" type="search"><select id="filter" aria-label="Фильтр по типу"><option value="">Все типы</option value="grass">Травяной</option><option value="fire">Огненный</option><option value="water">Водный</option><option value="electric">Электрический</option><option value="psychic">Психический</option><option value="ghost">Призрачный</option><option value="normal">Обычный</option></select><select id="generation" aria-label="Поколение"></select><div id="catalog" class="catalog"></div><div class="catalog-footer"><span id="catalog-progress"></span><button id="load-more" type="button">Показать ещё</button></div><div id="status" class="status" role="status"></div></aside>
@@ -455,8 +468,8 @@ if(!conditions?.length)return tr('evolutionUnknown');const ru=lang==='ru',type=t
 const itemsRu={'fire-stone':'Огненный камень','water-stone':'Водный камень','thunder-stone':'Громовой камень','leaf-stone':'Лиственный камень','moon-stone':'Лунный камень','sun-stone':'Солнечный камень','ice-stone':'Ледяной камень','dawn-stone':'Рассветный камень','dusk-stone':'Сумеречный камень','shiny-stone':'Сияющий камень','metal-coat':'Металлическое покрытие','kings-rock':'Королевский камень'};
 const item=i=>ru?itemsRu[i.name]||pretty(i.name):pretty(i.name);
 const triggerRu={'level-up':'Повышение уровня','use-item':'Использовать предмет',trade:'Обмен',shed:'Свободное место в команде и покебол',spin:'Вращение','tower-of-darkness':'Башня тьмы','tower-of-waters':'Башня вод','three-critical-hits':'3 критических попадания за бой','take-damage':'Получить урон','agile-style-move':'Приём в быстром стиле','strong-style-move':'Приём в мощном стиле','recoil-damage':'Урон от отдачи',other:'Особое условие'};
-const known=new Set(['trigger','min_level','item','held_item','min_happiness','min_beauty','min_affection','time_of_day','known_move','known_move_type','location','needs_overworld_rain','party_species','party_type','relative_physical_stats','trade_species','turn_upside_down','gender']);
-return conditions.map(c=>{const parts=[];const trigger=c.trigger?.name;
+const known=new Set(['trigger','min_level','item','held_item','min_happiness','min_beauty','min_affection','time_of_day','known_move','known_move_type','location','needs_overworld_rain','party_species','party_type','relative_physical_stats','trade_species','turn_upside_down','gender','version_group','is_default']);
+return [...new Set(conditions.map(c=>{const parts=[];const trigger=c.trigger?.name;
 if(trigger)parts.push(ru?triggerRu[trigger]||pretty(trigger):pretty(trigger));
 if(c.min_level!==null&&c.min_level!==undefined)parts.push((ru?'Уровень ':'Level ')+c.min_level+'+');
 if(c.item)parts.push(item(c.item));if(c.held_item)parts.push((ru?'Держит: ':'Holding: ')+item(c.held_item));
@@ -476,7 +489,7 @@ if(c.turn_upside_down)parts.push(ru?'Перевернуть устройство
 if(c.gender)parts.push(c.gender===1?(ru?'Самка':'Female'):(ru?'Самец':'Male'));
 Object.entries(c).forEach(([key,value])=>{if(!known.has(key)&&value!==null&&value!==undefined&&value!==false&&value!=='')parts.push(pretty(key.replaceAll('_','-'))+': '+evolutionValue(value))});
 return parts.join(' · ')||tr('evolutionUnknown')
-}).join(' '+tr('or')+' ')
+}))].join(' '+tr('or')+' ')
 }
 $('form-select').onchange=()=>{const parts=$('form-select').value.split(':');const choice=parts[0]==='form'?{bodyId:Number(parts[2]),cosmeticId:Number(parts[1])}:{bodyId:Number(parts[1])};void select(current.id,false,choice)};
 $('cry').onclick=playCry;$('retry-extras').onclick=()=>void loadExtras(current,true);
