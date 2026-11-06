@@ -289,12 +289,41 @@ main>aside #status:empty{display:none}
 @media(prefers-reduced-motion:reduce){main>aside{transition:none!important}}
 
 .aside-title{gap:8px}.aside-title h2{flex:1;min-width:0;overflow-wrap:anywhere}.aside-title .count{flex:none}
+
+/* All Pokémon visuals use high-resolution artwork with smooth illustration motion. */
+.poke{min-height:110px;gap:14px;padding:12px}.poke img{width:82px;height:82px;flex:none;object-fit:contain;image-rendering:auto}
+.compare-result img{width:54px;height:54px;flex:none;image-rendering:auto}
+.compare-results{max-height:205px}.compare-result{min-height:70px}
+.compare-art{width:150px;height:150px;image-rendering:auto}
+.evolution .evo-level button{flex-basis:250px;width:250px;padding:18px 14px}
+.evolution .evo-level button img{width:128px;height:128px;object-fit:contain;image-rendering:auto}
+.stage[data-visual=hq]{min-height:520px;padding:62px 22px 76px;overflow:hidden}
+.stage[data-visual=hq] .hero-img{width:min(100%,500px);height:420px;max-height:100%;max-width:100%;image-rendering:auto;animation:hq-pokemon-idle 6s ease-in-out infinite;transform-origin:50% 80%}
+:root[data-pokemon-motion=active] .poke img,:root[data-pokemon-motion=active] .evolution img,:root[data-pokemon-motion=active] .compare-art,:root[data-pokemon-motion=active] .compare-result img{animation:hq-pokemon-mini 7s ease-in-out infinite;transform-origin:50% 85%}
+:root[data-pokemon-motion=active] .poke:hover img,:root[data-pokemon-motion=active] .evolution button:hover img,:root[data-pokemon-motion=active] .compare-result:hover img{animation:hq-pokemon-greet 1.6s ease-in-out infinite}
+:root[data-pokemon-motion=paused] .hero-img,:root[data-pokemon-motion=paused] .poke img,:root[data-pokemon-motion=paused] .evolution img,:root[data-pokemon-motion=paused] .compare-art,:root[data-pokemon-motion=paused] .compare-result img{animation:none!important}
+@keyframes hq-pokemon-idle{0%,100%{transform:translateY(0) rotate(-.6deg) scale(1)}50%{transform:translateY(-10px) rotate(.8deg) scale(1.025)}}
+@keyframes hq-pokemon-mini{0%,100%{transform:translateY(0) rotate(-.5deg)}50%{transform:translateY(-3px) rotate(.8deg) scale(1.025)}}
+@keyframes hq-pokemon-greet{0%,100%{transform:translateY(0) rotate(0)}30%{transform:translateY(-6px) rotate(-4deg)}70%{transform:translateY(-3px) rotate(4deg)}}
+@media(min-width:1600px){.stage[data-visual=hq]{min-height:600px}.stage[data-visual=hq] .hero-img{width:min(100%,560px);height:480px}}
+@media(max-width:1100px) and (min-width:801px){.stage[data-visual=hq]{min-height:480px}.stage[data-visual=hq] .hero-img{height:360px;max-width:440px}}
+@media(max-width:800px){.stage[data-visual=hq]{height:clamp(400px,110vw,500px);min-height:0;padding:18px 14px 14px;grid-template-rows:auto minmax(0,1fr) auto auto}
+.stage[data-visual=hq] .hero-img{width:min(100%,340px);height:100%;max-height:300px;min-height:0}
+.compare-art{width:120px;height:120px}}
+@media(max-width:650px){.evolution .evo-level{flex-basis:190px;min-width:190px}.evolution .evo-level button{flex-basis:190px;width:190px}.evolution .evo-level button img{width:112px;height:112px}.poke img{width:84px;height:84px}.poke{min-height:112px}}
+@media(prefers-reduced-motion:reduce){.hero-img,.poke img,.evolution img,.compare-art,.compare-result img{animation:none!important}}
+
+.poke{display:grid;grid-template-columns:82px minmax(0,1fr);column-gap:12px;row-gap:4px;align-items:center}
+.poke img{grid-column:1;grid-row:1/3}.poke span{grid-column:2;grid-row:1;min-width:0}
+.poke strong,.poke small{overflow-wrap:anywhere}
+.poke em{display:block;grid-column:2;grid-row:2;justify-self:start}
 </style></head><body>
 <header><div class="brand">POKÉ<b> / </b>FIELD<small>ЭНЦИКЛОПЕДИЯ ПОКЕМОНОВ</small></div><nav class="topnav" aria-label="Разделы"><button id="all" class="active">Покедекс</button><button id="saved">♡ Избранное <span id="fav-count">0</span></button></nav><div class="preferences"><button id="theme-toggle" class="slider-switch" role="switch" aria-checked="false" aria-label="Тёмная тема"><span aria-hidden="true">☀</span><span aria-hidden="true">☾</span></button><button id="language" class="slider-switch language-switch" role="switch" aria-checked="false" aria-label="English language"><span aria-hidden="true">RU</span><span aria-hidden="true">EN</span></button></div><span class="online">Полевой справочник / v.01</span></header>
 <button id="catalog-backdrop" class="catalog-backdrop" hidden aria-label="Закрыть каталог"></button><main><aside id="pokedex-panel"><div class="eyebrow">Исследуй. Изучай. Открывай.</div><div class="aside-title"><h2>Покедекс</h2><span id="count" class="count"></span><button id="catalog-close" class="catalog-close" aria-label="Закрыть каталог">×</button></div><input id="search" aria-label="Поиск покемона" placeholder="Поиск по имени или №…" type="search"><select id="filter" aria-label="Фильтр по типу"><option value="">Все типы</option value="grass">Травяной</option><option value="fire">Огненный</option><option value="water">Водный</option><option value="electric">Электрический</option><option value="psychic">Психический</option><option value="ghost">Призрачный</option><option value="normal">Обычный</option></select><select id="generation" aria-label="Поколение"></select><select id="category" aria-label="Все категории"></select><div class="recent-actions"><button id="recent-toggle" aria-pressed="false"></button><button id="clear-history" hidden></button></div><div id="catalog" class="catalog"></div><div class="catalog-footer"><span id="catalog-progress"></span><button id="load-more" type="button">Показать ещё</button></div><div id="status" class="status" role="status"></div></aside>
 <section class="workspace" aria-label="Информация о покемоне"><div class="mobile-catalog-bar"><button id="catalog-open" aria-expanded="false" aria-controls="pokedex-panel">☷ Каталог</button></div><div class="crumb"><span>ПОКЕДЕКС &nbsp; / &nbsp; КАНТО &nbsp; / &nbsp; <b id="breadcrumb"></b></span><button id="random" style="font-size:11px;padding:8px 12px">↗ Случайный</button></div><div class="hero"><div class="stage"><div class="stage-display-controls"><button id="visual-mode" aria-pressed="true">✦ Анимация</button><button id="zoom-image" class="zoom-image" aria-label="Открыть подробное изображение">⤢</button><button id="motion-pause" aria-pressed="false" aria-label="Остановить анимацию">Ⅱ</button></div><span id="ghost" class="ghost"></span><img id="hero-img" class="hero-img" alt="" role="button" tabindex="0"><span class="stage-tag">OFFICIAL ARTWORK — 001</span><div class="image-controls"><button id="cry" aria-pressed="false" disabled>♪ Голос</button><button id="shiny" aria-pressed="false">✧ Shiny</button><button id="prev" aria-label="Предыдущий покемон">←</button><button id="next" aria-label="Следующий покемон">→</button></div></div><p id="swipe-hint" class="swipe-hint"></p><div class="details"><span id="number" class="number"></span><h1 id="name"></h1><div id="species" class="species"></div><div id="types" class="types"></div><div class="form-picker"><label id="form-label" for="form-select">Форма покемона</label><select id="form-select"></select></div><p id="description" class="description"></p><div id="translation-note" class="translation-note" role="status"></div><button id="retry-translation" class="small-retry" hidden>Повторить перевод</button><div id="card-status" class="card-status" role="status"></div><button id="retry-card" class="small-retry" hidden>Повторить</button><div class="measure"><div><strong id="height"></strong><small>РОСТ</small></div><div><strong id="weight"></strong><small>ВЕС</small></div></div><div class="evo-navigation"><button id="evo-prev" aria-label="Предыдущая эволюция">←</button><span id="evo-position"></span><button id="evo-next" aria-label="Следующая эволюция">→</button></div><button id="favorite" class="favorite" aria-pressed="false">♡ В избранное</button><button id="add-compare" class="add-compare">⇄ Добавить к сравнению</button><button id="share-card" class="share-card">↗ Поделиться</button><p id="share-status" class="translation-note" role="status"></p><input id="share-url" readonly hidden></div></div><div class="bottom"><section class="panel"><div class="panel-head"><h2>Базовые характеристики</h2><small id="total"></small></div><div id="stats"></div></section><section class="panel evolution-panel"><div class="panel-head"><h2>Цепочка эволюций</h2><small>ЖИЗНЕННЫЙ ЦИКЛ</small></div><div id="evolution" class="evolution"></div><p class="evo-note">Выбери покемона, чтобы изучить его форму.</p></section><section class="panel abilities-panel"><div class="panel-head"><h2 id="abilities-title">Способности</h2></div><div id="abilities-list" role="list"></div></section><section class="panel matchups-panel"><div class="panel-head"><h2 id="matchups-title">Слабости и устойчивости</h2></div><div id="matchups-list"></div><p id="matchups-note" class="evo-note"></p><div id="extras-status" class="card-status" role="status"></div><button id="retry-extras" class="small-retry" hidden>Повторить</button></section></div><footer><span>ДАННЫЕ И ИЛЛЮСТРАЦИИ · POKÉAPI</span><span>← → ПЕРЕКЛЮЧЕНИЕ &nbsp; / &nbsp; НАЙДИ СВОЕГО ПОКЕМОНА</span></footer></section></main>
 <button id="compare-open" class="compare-tray" aria-haspopup="dialog" aria-controls="compare-dialog">⇄ Сравнение 0/4</button>
 <dialog id="compare-dialog" aria-labelledby="compare-title" aria-describedby="compare-help"><div class="compare-dialog-header"><div><h2 id="compare-title">Сравнение</h2><p id="compare-help"></p></div><button id="compare-close" aria-label="Закрыть сравнение">×</button></div><div class="compare-dialog-body"><div class="compare-toolbar"><span id="compare-selection-count"></span><button id="compare-current"></button><button id="compare-clear"></button></div><input type="search" id="compare-search" autocomplete="off"><div id="compare-results" class="compare-results"></div><p id="compare-message" class="compare-message" role="status"></p><p id="compare-scroll-hint" class="compare-scroll-hint"></p><div class="comparison-scroll" role="region" tabindex="0" aria-labelledby="compare-title"><table id="compare-table"></table></div></div></dialog><dialog id="artwork-dialog" aria-labelledby="artwork-title"><div class="artwork-header"><h2 id="artwork-title"></h2><button id="artwork-close" aria-label="Закрыть изображение">×</button></div><select id="artwork-style"></select><img id="artwork-image" alt=""><p id="artwork-note"></p></dialog><script>
+
 
 
 
@@ -367,7 +396,7 @@ function normalize(value){return value.toLowerCase().normalize('NFD').replace(/[
 function matches(p){const q=normalize($('search').value.trim());return(!onlySaved||favorites.includes(p.id))&&(!$('filter').value||p.types.includes($('filter').value))&&(!$('generation').value||p.generation===Number($('generation').value))&&(!q||(/^\d+$/.test(q)?(p.id===Number(q)||p.bodyId===Number(q)):[p.name,p.slug,p.ru||'',p.bodyId?localizedForm(p.slug):''].some(n=>normalize(n).includes(q))))}
 function filtered(){return explorationCatalog().filter(matches)}
 function art(id,s=false){return 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/'+(s?'shiny/':'')+id+'.png'}
-function sprite(id){return 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+id+'.png'}
+function sprite(id){return art(id)}
 function make(tag,cls,value){const e=document.createElement(tag);if(cls)e.className=cls;if(value!==undefined)e.textContent=value;return e}
 function status(message=''){$('status').textContent=message}
 function syncThemeButton(){const dark=document.documentElement.dataset.theme==='dark';$('theme-toggle').setAttribute('aria-label',lang==='en'?'Dark theme':'Тёмная тема');$('theme-toggle').setAttribute('aria-checked',String(dark));$('theme-toggle').title=tr(dark?'light':'dark');$('language').setAttribute('aria-checked',String(lang==='en'));$('language').setAttribute('aria-label',lang==='en'?'English language':'Английский язык');$('language').title=lang==='en'?'Switch to Russian':'Переключить на английский'}
@@ -388,7 +417,7 @@ syncCatalogHeading();
 const scrollTop=$('catalog').scrollTop,scrollLeft=$('catalog').scrollLeft;
 if(reset){limit=40;$('catalog').scrollTop=0;$('catalog').scrollLeft=0}
 const matches=filtered();$('count').textContent=matches.length.toLocaleString(lang);$('catalog').replaceChildren();
-matches.slice(0,limit).forEach(p=>{const b=make('button','poke');b.setAttribute('aria-pressed',String(p.id===current.id&&(!p.bodyId||p.bodyId===(current.formId||current.id))));const img=make('img');img.src=sprite(p.bodyId||p.id);img.alt='';img.loading='lazy';img.width=55;img.height=55;img.onerror=()=>{img.onerror=null;img.src=art(p.bodyId||p.id)};
+matches.slice(0,limit).forEach(p=>{const b=make('button','poke');b.setAttribute('aria-pressed',String(p.id===current.id&&(!p.bodyId||p.bodyId===(current.formId||current.id))));const img=make('img');img.alt='';img.loading='lazy';img.width=82;img.height=82;useQualityArtwork(img,p.bodyId||p.id,p.id);
 const label=make('span');label.append(make('strong',null,catalogDisplayName(p)),make('small',null,lang==='ru'&&p.ru?p.ru:p.types.map(typeLabel).join(' / ')));b.append(img,label,make('em',null,'#'+String(p.id).padStart(3,'0')));b.onclick=()=>select(p.id,false,entryFormChoice(p));$('catalog').append(b)});
 if(!matches.length)$('catalog').append(make('p','empty',tr(showHistory?'recentEmpty':onlySaved?'emptySaved':'emptySearch')));
 $('load-more').hidden=matches.length<=limit;$('catalog-progress').textContent=tr('shown')+' '+Math.min(limit,matches.length)+' '+tr('of')+' '+matches.length;
@@ -397,14 +426,12 @@ if(!reset){$('catalog').scrollTop=scrollTop;$('catalog').scrollLeft=scrollLeft}
 }
 function more(){limit+=40;renderList()}
 
+
 function renderImage(){
 const image=$('hero-img'),p=current;pokemonReaction?.cancel();pokemonReaction=null;
-const key=shiny?'shiny':'normal',animated=shiny?p.animatedShinyArtwork:p.animatedArtwork;
-const useAnimated=motionMode==='animated'&&motionEnabled()&&animated&&!p.animationFailures?.[key];
-const url=useAnimated?animated:(shiny?p.shinyArtwork:p.artwork)||art(p.formId||p.id,shiny);
-document.querySelector('.stage').dataset.visual=useAnimated?'animated':'artwork';
-image.onerror=()=>{if(current!==p)return;if(useAnimated){p.animationFailures={...p.animationFailures,[key]:true};renderImage()}else if(shiny){shiny=false;status(tr('noShiny'));renderImage()}else{image.onerror=null;image.src=p.fallbackSprite||sprite(p.formId||p.id);status(tr('imageError'))}};
-if(image.src!==url){image.onload=()=>{if(current===p&&motionEnabled()&&typeof image.animate==='function'){pokemonReaction=image.animate([{opacity:0,transform:'translateY(12px) scale(.94)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:360,easing:'ease-out'})}};image.src=url}
+document.querySelector('.stage').dataset.visual='hq';
+image.onload=()=>{if(current===p&&motionEnabled()&&typeof image.animate==='function')pokemonReaction=image.animate([{opacity:0,transform:'translateY(10px) scale(.96)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:360,easing:'ease-out'})};
+useQualityArtwork(image,p.formId||p.id,p.id,shiny,shiny?p.shinyArtwork:p.artwork,()=>{if(current===p)syncMotionControls()});
 image.alt=(lang==='ru'&&p.ru?p.ru:p.name)+(shiny?' — shiny':'');$('shiny').setAttribute('aria-pressed',String(shiny));syncMotionControls()
 }
 function renderCard(){
@@ -436,7 +463,7 @@ $('evo-prev').setAttribute('aria-label',lang==='ru'?'Предыдущая эво
 if(!chain){$('evolution').append(make('p','empty',tr(chainError?'evoError':'evoLoading')));return}
 const node=chain.find(n=>n.id===current.id);$('evo-position').textContent=chain.length===1?tr('noEvo'):tr('stage')+' '+((node?.depth||0)+1);
 $('evo-prev').disabled=!node?.parent;$('evo-next').disabled=!chain.some(n=>n.parent===current.id);
-for(let depth=0;depth<=Math.max(...chain.map(n=>n.depth));depth++){const level=make('div','evo-level');level.append(make('span','evo-level-label',tr('stage')+' '+(depth+1)));chain.filter(n=>n.depth===depth).forEach(n=>{const p=byId.get(n.id);if(!p)return;const btn=make('button');btn.dataset.evolution=String(p.id);btn.setAttribute('aria-pressed',String(p.id===current.id));btn.setAttribute('aria-label',p.name);const img=make('img');img.src=art(p.id);img.alt='';img.loading='lazy';btn.append(img,make('strong',null,p.name),make('small',null,'#'+String(p.id).padStart(3,'0')));if(n.parent)btn.append(make('span','evo-rule',tr('stageFrom')+' '+(byId.get(n.parent)?.name||'')+' · '+formatEvolution(n.conditions)));btn.onclick=()=>select(p.id);level.append(btn)});$('evolution').append(level)}
+for(let depth=0;depth<=Math.max(...chain.map(n=>n.depth));depth++){const level=make('div','evo-level');level.append(make('span','evo-level-label',tr('stage')+' '+(depth+1)));chain.filter(n=>n.depth===depth).forEach(n=>{const p=byId.get(n.id);if(!p)return;const btn=make('button');btn.dataset.evolution=String(p.id);btn.setAttribute('aria-pressed',String(p.id===current.id));btn.setAttribute('aria-label',p.name);const img=make('img');img.alt='';img.loading='lazy';useQualityArtwork(img,p.id,p.id);btn.append(img,make('strong',null,p.name),make('small',null,'#'+String(p.id).padStart(3,'0')));if(n.parent)btn.append(make('span','evo-rule',tr('stageFrom')+' '+(byId.get(n.parent)?.name||'')+' · '+formatEvolution(n.conditions)));btn.onclick=()=>select(p.id);level.append(btn)});$('evolution').append(level)}
 }
 function moveEvolution(delta){
 const chain=chains.get(current.chainId)||[];if(delta<0){const node=chain.find(n=>n.id===current.id);if(node?.parent)select(node.parent)}
@@ -451,7 +478,7 @@ function cacheGet(key){const value=read(key,null);return value&&Date.now()-value
 function cachePut(key,data){write(key,{at:Date.now(),data})}
 async function loadDetails(p,force=false){
 if(!force&&details.has(p.id))return details.get(p.id);
-const key='pokefield-card-v4-'+p.id,cached=!force&&cacheGet(key);if(cached){details.set(p.id,cached);return cached}
+const key='pokefield-card-v5-'+p.id,cached=!force&&cacheGet(key);if(cached){details.set(p.id,cached);return cached}
 const [body,species]=await Promise.all([api('pokemon/'+p.id+'/'),api('pokemon-species/'+p.id+'/')]);
 const english=species.flavor_text_entries.filter(e=>e.language.name==='en');const source=english.at(-1)?.flavor_text||'';
 const card={...bodyDetails(body),varieties:species.varieties.map(v=>({id:resourceId(v.pokemon.url),slug:v.pokemon.name,isDefault:v.is_default})),descriptionEn:source.replace(/[\n\f\r]+/g,' ').replace(/\s+/g,' ').trim(),speciesEn:species.genera.find(g=>g.language.name==='en')?.genus||'',chainId:species.evolution_chain?Number(species.evolution_chain.url.split('/').filter(Boolean).at(-1)):null};
@@ -466,7 +493,7 @@ chains.set(chainId,chain)
 async function select(id,force=false,formChoice=null,navigation='push'){
 const base=byId.get(id);if(!base)return;closeCatalog(false);stopCry();const p={...base};current=p;shiny=false;const version=++selectionVersion;detailBusy=true;detailError=false;chainBusy=true;chainError=false;status();renderImage();renderCard();renderList();
 try{const card=await loadDetails(p,force);const seed=seeds.get(p.id);Object.assign(p,card);p.defaultBodyId=card.formId;
-if(formChoice){const bodyId=Number(formChoice.bodyId);if(!p.varieties.some(v=>v.id===bodyId))throw new Error('Unknown form');if(bodyId!==card.formId)Object.assign(p,await loadVariant(bodyId,force));if(formChoice.cosmeticId){const cosmeticId=Number(formChoice.cosmeticId);if(!p.cosmeticForms.some(f=>f.id===cosmeticId))throw new Error('Unknown cosmetic form');const cosmetic=await api('pokemon-form/'+cosmeticId+'/');p.cosmeticId=cosmeticId;p.vectorArtwork=null;p.animatedArtwork=null;p.animatedShinyArtwork=null;p.formSlug=cosmetic.name;p.types=cosmetic.types.map(t=>t.type.name);p.artwork=cosmetic.sprites.front_default||p.artwork;p.shinyArtwork=cosmetic.sprites.front_shiny||null;p.fallbackSprite=p.artwork;p.formLabel=localizedForm(cosmetic.name)}}
+if(formChoice){const bodyId=Number(formChoice.bodyId);if(!p.varieties.some(v=>v.id===bodyId))throw new Error('Unknown form');if(bodyId!==card.formId)Object.assign(p,await loadVariant(bodyId,force));if(formChoice.cosmeticId){const cosmeticId=Number(formChoice.cosmeticId);if(!p.cosmeticForms.some(f=>f.id===cosmeticId))throw new Error('Unknown cosmetic form');const cosmetic=await api('pokemon-form/'+cosmeticId+'/');p.cosmeticId=cosmeticId;p.vectorArtwork=null;p.animatedArtwork=null;p.animatedShinyArtwork=null;p.formSlug=cosmetic.name;p.types=cosmetic.types.map(t=>t.type.name);p.illustrationIsBase=true;p.fallbackSprite=p.artwork;p.formLabel=localizedForm(cosmetic.name)}}
 p.generation=regionalGeneration(p.formSlug||'')||p.generation;if(seed){p.descriptionRu=seed.descriptionRu;p.speciesRu=seed.speciesRu}
 if(version!==selectionVersion)return;detailBusy=false;rememberVisit(p);updateCardUrl(p,navigation);renderImage();renderCard();void loadExtras(p,force);
 try{await loadChain(p.chainId,force)}catch{if(version===selectionVersion)chainError=true}
@@ -506,8 +533,8 @@ const abilityNamesRu={overgrow:'Разрастание',blaze:'Пламя',torre
 const abilityCache=new Map(),typeCache=new Map(),variantCache=new Map();
 let activeAudio=null,cryPlaying=false;
 function resourceId(url){return Number(url.split('/').filter(Boolean).at(-1))}
-function bodyDetails(body){const official=body.sprites?.other?.['official-artwork'];return {formId:body.id,bodySlug:body.name,formSlug:body.name,height:body.height,weight:body.weight,stats:body.stats.map(s=>s.base_stat),types:body.types.map(t=>t.type.name),abilities:body.abilities.map(a=>({slug:a.ability.name,isHidden:a.is_hidden})),cry:body.cries?.latest||body.cries?.legacy||null,artwork:official?.front_default||body.sprites?.front_default||null,shinyArtwork:official?.front_shiny||body.sprites?.front_shiny||null,animatedArtwork:body.sprites?.other?.showdown?.front_default||body.sprites?.versions?.['generation-v']?.['black-white']?.animated?.front_default||null,animatedShinyArtwork:body.sprites?.other?.showdown?.front_shiny||body.sprites?.versions?.['generation-v']?.['black-white']?.animated?.front_shiny||null,fallbackSprite:body.sprites?.front_default||null,vectorArtwork:body.sprites?.other?.dream_world?.front_default||null,cosmeticForms:(body.forms||[]).map(f=>({id:resourceId(f.url),slug:f.name}))}}
-async function loadVariant(id,force=false){if(!force&&variantCache.has(id))return variantCache.get(id);const key='pokefield-variant-v3-'+id;let data=!force&&cacheGet(key);if(!data){data=bodyDetails(await api('pokemon/'+id+'/'));cachePut(key,data)}variantCache.set(id,data);return data}
+function bodyDetails(body){const official=body.sprites?.other?.['official-artwork'];return {formId:body.id,bodySlug:body.name,formSlug:body.name,height:body.height,weight:body.weight,stats:body.stats.map(s=>s.base_stat),types:body.types.map(t=>t.type.name),abilities:body.abilities.map(a=>({slug:a.ability.name,isHidden:a.is_hidden})),cry:body.cries?.latest||body.cries?.legacy||null,artwork:official?.front_default||body.sprites?.other?.home?.front_default||body.sprites?.other?.dream_world?.front_default||null,shinyArtwork:official?.front_shiny||body.sprites?.other?.home?.front_shiny||null,animatedArtwork:body.sprites?.other?.showdown?.front_default||body.sprites?.versions?.['generation-v']?.['black-white']?.animated?.front_default||null,animatedShinyArtwork:body.sprites?.other?.showdown?.front_shiny||body.sprites?.versions?.['generation-v']?.['black-white']?.animated?.front_shiny||null,fallbackSprite:official?.front_default||body.sprites?.other?.home?.front_default||null,vectorArtwork:body.sprites?.other?.dream_world?.front_default||null,cosmeticForms:(body.forms||[]).map(f=>({id:resourceId(f.url),slug:f.name}))}}
+async function loadVariant(id,force=false){if(!force&&variantCache.has(id))return variantCache.get(id);const key='pokefield-variant-v4-'+id;let data=!force&&cacheGet(key);if(!data){data=bodyDetails(await api('pokemon/'+id+'/'));cachePut(key,data)}variantCache.set(id,data);return data}
 function localizedForm(slug){if(lang==='en')return pretty(slug);const names={mega:'Мега',gmax:'Гигантамакс',alola:'Алола',galar:'Галар',hisui:'Хисуи',paldea:'Палдея',origin:'Первородная',therian:'Тотемная',incarnate:'Воплощённая',primal:'Первобытная',attack:'Атака',defense:'Защита',speed:'Скорость',normal:'Обычная',male:'Самец',female:'Самка',sunny:'Солнечная',rainy:'Дождевая',snowy:'Снежная',wash:'Стиральная',heat:'Тепловая',frost:'Морозильная',fan:'Вентилятор',mow:'Газонокосилка',small:'Малая',large:'Большая',super:'Огромная',average:'Средняя'};return slug.split('-').map(word=>names[word]||pretty(word)).join(' ')}
 function renderForms(){
 const p=current,select=$('form-select');select.replaceChildren();
@@ -626,7 +653,7 @@ function renderComparePicker(){
 const q=normalize($('compare-search').value);$('compare-results').replaceChildren();if(comparison.length>=4){$('compare-results').append(make('p','empty',tr('compareLimitHint')));return}
 const results=catalog.filter(p=>!q||(/^\d+$/.test(q)?p.id===Number(q):[p.name,p.slug,p.ru||''].some(name=>normalize(name).includes(q)))).slice(0,12);
 if(!results.length){$('compare-results').append(make('p','empty',tr('compareSearchEmpty')));return}
-results.forEach(p=>{const ref={id:p.id,bodyId:p.id,cosmeticId:null},button=make('button','compare-result'),image=make('img');image.src=sprite(p.id);image.alt='';image.loading='lazy';const title=make('span',null,p.name);title.append(make('small',null,'#'+String(p.id).padStart(3,'0')));button.append(image,title,make('b',null,inComparison(ref)?'✓':'+'));button.disabled=inComparison(ref);button.setAttribute('aria-label',p.name+' · '+tr(inComparison(ref)?'compareSelected':'compareAdd'));button.onclick=()=>addComparison(ref);$('compare-results').append(button)})
+results.forEach(p=>{const ref={id:p.id,bodyId:p.id,cosmeticId:null},button=make('button','compare-result'),image=make('img');image.alt='';image.loading='lazy';useQualityArtwork(image,p.id,p.id);const title=make('span',null,p.name);title.append(make('small',null,'#'+String(p.id).padStart(3,'0')));button.append(image,title,make('b',null,inComparison(ref)?'✓':'+'));button.disabled=inComparison(ref);button.setAttribute('aria-label',p.name+' · '+tr(inComparison(ref)?'compareSelected':'compareAdd'));button.onclick=()=>addComparison(ref);$('compare-results').append(button)})
 }
 function comparisonChips(types,parent,multipliers=null){types.forEach(type=>{const label=typeLabel(type)+(multipliers?' ×'+multipliers[type].toLocaleString(lang):''),chip=make('span','type',label);chip.dataset.type=type;parent.append(chip)})}
 function renderComparison(){
@@ -636,8 +663,8 @@ $('compare-table').replaceChildren();if(!comparison.length)return;
 const table=$('compare-table'),head=make('thead'),top=make('tr'),metricHead=make('th',null,tr('compareMetric'));metricHead.scope='col';top.append(metricHead);
 comparison.forEach(entry=>{
 const th=make('th');th.scope='col';const name=entry.data?.name||byId.get(entry.ref.id).name,remove=make('button','compare-remove','×');remove.setAttribute('aria-label',tr('compareRemove')+' '+name);remove.onclick=()=>removeComparison(entry);th.append(remove);
-const image=make('img','compare-art');image.src=entry.data?.artwork||art(entry.ref.bodyId);image.alt=name;image.loading='lazy';image.onerror=()=>{image.onerror=null;image.src=sprite(entry.ref.bodyId)};th.append(image,make('strong','compare-name',name));
-const label=entry.data?(entry.data.formId===entry.data.defaultBodyId&&!entry.data.cosmeticId?tr('defaultForm'):localizedForm(entry.data.formSlug)):'#'+String(entry.ref.id).padStart(3,'0');th.append(make('small','compare-form',label));
+const image=make('img','compare-art');image.alt=name;image.loading='lazy';useQualityArtwork(image,entry.ref.bodyId,entry.ref.id,false,entry.data?.artwork);th.append(image,make('strong','compare-name',name));
+const label=entry.data?(entry.data.formId===entry.data.defaultBodyId&&!entry.data.cosmeticId?tr('defaultForm'):localizedForm(entry.data.formSlug)):'#'+String(entry.ref.id).padStart(3,'0');th.append(make('small','compare-form',label));if(entry.data?.illustrationIsBase)th.append(make('small','compare-form',tr('baseIllustration')));
 if(entry.loading)th.append(make('p','empty',tr('loading')));if(entry.error){th.append(make('p','empty',tr('compareLoadError')));const retry=make('button','small-retry',tr('retry'));retry.onclick=()=>void hydrateComparison(entry,true);th.append(retry)}top.append(th)});
 head.append(top);table.append(head);const body=make('tbody');
 const row=(label,render)=>{const trEl=make('tr'),heading=make('th',null,label);heading.scope='row';trEl.append(heading);comparison.forEach(entry=>{const td=make('td');if(!entry.data||entry.error||entry.loading)td.append(make('span','empty','—'));else render(td,entry.data);trEl.append(td)});body.append(trEl)};
@@ -656,19 +683,19 @@ $('compare-current').onclick=()=>addComparison(currentComparisonRef());$('compar
 $('compare-clear').onclick=()=>{comparison=[];persistComparison();renderComparison();$('compare-search').focus()};$('compare-search').oninput=renderComparePicker;
 
 /* Native animated sprites, optional motion and accessible tap reactions. */
-Object.assign(extraText.ru,{animation:'✦ Анимация',animationToggle:'Переключить анимированный спрайт и иллюстрацию',pauseMotion:'Остановить анимацию',resumeMotion:'Продолжить анимацию',reducedMotion:'В системе включено уменьшение анимации',interactPokemon:'Нажми, чтобы покемон отреагировал',motionFallback:'Анимированный спрайт этой формы недоступен — показана иллюстрация'});
-Object.assign(extraText.en,{animation:'✦ Animation',animationToggle:'Switch between animated sprite and artwork',pauseMotion:'Pause animation',resumeMotion:'Resume animation',reducedMotion:'Reduced motion is enabled in system settings',interactPokemon:'Press to make the Pokémon react',motionFallback:'This form has no animated sprite — showing artwork'});
-let motionMode=read('pokefield-visual-mode-v2','artwork');if(!['animated','artwork'].includes(motionMode))motionMode='artwork';
+Object.assign(extraText.ru,{animation:'✦ Анимация',animationToggle:'Включить или выключить движение иллюстрации',pauseMotion:'Остановить анимацию',resumeMotion:'Продолжить анимацию',reducedMotion:'В системе включено уменьшение анимации',interactPokemon:'Нажми, чтобы покемон отреагировал',motionFallback:'Анимированный спрайт этой формы недоступен — показана иллюстрация'});
+Object.assign(extraText.en,{animation:'✦ Animation',animationToggle:'Turn artwork motion on or off',pauseMotion:'Pause animation',resumeMotion:'Resume animation',reducedMotion:'Reduced motion is enabled in system settings',interactPokemon:'Press to make the Pokémon react',motionFallback:'This form has no animated sprite — showing artwork'});
+let motionMode=read('pokefield-visual-mode-v3','animated');if(!['animated','artwork'].includes(motionMode))motionMode='animated';
 let motionPaused=read('pokefield-motion-paused',false)===true,pokemonReaction=null,reactionStep=0;
 const motionMedia=typeof matchMedia==='function'?matchMedia('(prefers-reduced-motion: reduce)'):{matches:false};
 function motionEnabled(){return !motionPaused&&!motionMedia.matches}
 function syncMotionControls(){
-const enabled=motionEnabled(),stage=document.querySelector('.stage');stage.dataset.motion=enabled?'active':'paused';stage.dataset.pokemonType=current.types[0];
+const enabled=motionEnabled(),stage=document.querySelector('.stage');stage.dataset.motion=enabled&&motionMode==='animated'?'active':'paused';document.documentElement.dataset.pokemonMotion=enabled&&motionMode==='animated'?'active':'paused';stage.dataset.pokemonType=current.types[0];
 $('visual-mode').textContent=tr('animation');$('visual-mode').setAttribute('aria-pressed',String(motionMode==='animated'));$('visual-mode').setAttribute('aria-label',tr('animationToggle'));
-const available=shiny?current.animatedShinyArtwork:current.animatedArtwork;$('visual-mode').title=motionMode==='animated'&&!available?tr('motionFallback'):tr('animationToggle');
+$('visual-mode').title=tr('animationToggle');
 $('motion-pause').textContent=enabled?'Ⅱ':'▶';$('motion-pause').setAttribute('aria-pressed',String(!enabled));$('motion-pause').disabled=motionMedia.matches;$('motion-pause').title=tr(motionMedia.matches?'reducedMotion':enabled?'pauseMotion':'resumeMotion');$('motion-pause').setAttribute('aria-label',$('motion-pause').title);
 $('hero-img').setAttribute('aria-label',(lang==='ru'&&current.ru?current.ru:current.name)+' · '+tr('interactPokemon'));
-document.querySelector('.stage-tag').textContent=(stage.dataset.visual==='animated'?'ANIMATED SPRITE':'OFFICIAL ARTWORK')+' — '+String(current.id).padStart(3,'0')
+document.querySelector('.stage-tag').textContent=($('hero-img').dataset.qualityFallback==='missing'?tr('artUnavailable'):current.illustrationIsBase||$('hero-img').dataset.qualityFallback==='base'?tr('baseIllustration'):'HQ ARTWORK')+' — '+String(current.id).padStart(3,'0')
 }
 function reactToPokemon(){
 if(!motionEnabled()||typeof $('hero-img').animate!=='function')return;pokemonReaction?.cancel();const patterns=[
@@ -677,7 +704,7 @@ if(!motionEnabled()||typeof $('hero-img').animate!=='function')return;pokemonRea
 [{transform:'scale(1)'},{transform:'scale(1.09) translateY(-5px)',offset:.4},{transform:'scale(.98)',offset:.75},{transform:'scale(1)'}]
 ];pokemonReaction=$('hero-img').animate(patterns[reactionStep++%patterns.length],{duration:650,easing:'cubic-bezier(.2,.7,.3,1)'})
 }
-$('visual-mode').onclick=()=>{motionMode=motionMode==='animated'?'artwork':'animated';write('pokefield-visual-mode',motionMode);renderImage()};
+$('visual-mode').onclick=()=>{motionMode=motionMode==='animated'?'artwork':'animated';write('pokefield-visual-mode-v3',motionMode);renderImage()};
 $('motion-pause').onclick=()=>{motionPaused=!motionPaused;write('pokefield-motion-paused',motionPaused);renderImage()};
 $('hero-img').onclick=()=>{if(!suppressPokemonClick)reactToPokemon()};$('hero-img').addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();reactToPokemon()}});
 if(typeof motionMedia.addEventListener==='function')motionMedia.addEventListener('change',()=>renderImage());
@@ -742,8 +769,8 @@ function renderArtwork(){
 const p=current,old=$('artwork-style').value||'illustration',vector=!shiny&&!p.cosmeticId&&p.vectorArtwork;$('artwork-style').replaceChildren(new Option(tr('illustration'),'illustration'));if(vector)$('artwork-style').append(new Option(tr('vector'),'vector'));
 $('artwork-style').value=old==='vector'&&vector?'vector':'illustration';
 const url=$('artwork-style').value==='vector'?vector:(shiny?p.shinyArtwork:p.artwork)||art(p.formId||p.id,shiny);
-const image=$('artwork-image');image.src=url;image.alt=current.name+(shiny?' — shiny':'');image.onerror=()=>{image.onerror=null;image.src=p.fallbackSprite||sprite(p.formId||p.id)};
-$('artwork-title').textContent=p.name+' · '+tr('zoomTitle');$('artwork-note').textContent=p.cosmeticId?tr('spriteNote'):tr('imageNote')
+const image=$('artwork-image');image.alt=current.name+(shiny?' — shiny':'');useQualityArtwork(image,p.formId||p.id,p.id,shiny,url);
+$('artwork-title').textContent=p.name+' · '+tr('zoomTitle');$('artwork-note').textContent=p.illustrationIsBase?tr('baseIllustration'):tr('imageNote')
 }
 function openArtwork(){renderArtwork();if(!$('artwork-dialog').open)$('artwork-dialog').showModal()}
 $('category').onchange=()=>renderList(true);$('recent-toggle').onclick=()=>{showHistory=!showHistory;onlySaved=false;$('saved').classList.remove('active');$('all').classList.toggle?.('active',!showHistory);syncCatalogHeading();renderList(true)};
@@ -765,6 +792,21 @@ pokemonStage.addEventListener('click',event=>{if(suppressPokemonClick){event.pre
 if(typeof window!=='undefined'){window.addEventListener('popstate',handlePokemonRoute);window.addEventListener('hashchange',handlePokemonRoute)}
 syncMobileCatalog();
 
+
+Object.assign(extraText.ru,{baseIllustration:'Иллюстрация базовой формы',artUnavailable:'Иллюстрация недоступна'});
+Object.assign(extraText.en,{baseIllustration:'Base form illustration',artUnavailable:'Artwork unavailable'});
+const unavailableArtwork=new Set();
+function useQualityArtwork(image,id,speciesId=id,isShiny=false,preferred=null,onFallback=null){
+const root='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/';
+const candidates=[{url:preferred,base:false},{url:art(id,isShiny),base:false},{url:root+'home/'+(isShiny?'shiny/':'')+id+'.png',base:false},...(!isShiny?[{url:root+'dream-world/'+id+'.svg',base:false}]:[]),...(id!==speciesId?[{url:art(speciesId,isShiny),base:true},{url:root+'home/'+(isShiny?'shiny/':'')+speciesId+'.png',base:true}]:[])].filter((x,i,all)=>x.url&&!unavailableArtwork.has(x.url)&&all.findIndex(y=>y.url===x.url)===i);
+let position=0;image.decoding='async';image.style.animationDelay=-(id%9)*.55+'s';
+function next(){
+const candidate=candidates[position++];if(!candidate){image.onerror=null;image.dataset.qualityFallback='missing';image.src='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><g fill="none" stroke="#8da4bb" stroke-width="6"><circle cx="100" cy="100" r="65"/><path d="M35 100h130"/><circle cx="100" cy="100" r="19" fill="#202b3a"/></g></svg>');onFallback?.();return}
+image.dataset.qualityFallback=candidate.base?'base':'none';if(candidate.base)image.title=tr('baseIllustration');image.onerror=()=>{unavailableArtwork.add(candidate.url);next()};if(image.src!==candidate.url)image.src=candidate.url;onFallback?.()
+}
+next()
+}
+
 const initialPokemonRoute=readPokemonRoute()||{id:1,formChoice:null};
 syncStatic();renderList();void select(initialPokemonRoute.id,false,initialPokemonRoute.formChoice,'replace');comparison.forEach(entry=>void hydrateComparison(entry));
 
@@ -777,6 +819,7 @@ document.documentElement.style.setProperty('--header-height',Math.ceil(header.ge
 measureCatalogHeader();
 if(typeof ResizeObserver!=='undefined'){const catalogHeaderObserver=new ResizeObserver(measureCatalogHeader);catalogHeaderObserver.observe(document.querySelector('header'))}
 else if(typeof window!=='undefined')window.addEventListener('resize',measureCatalogHeader,{passive:true});
+
 
 
 
