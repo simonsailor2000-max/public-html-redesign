@@ -135,11 +135,24 @@ header{display:grid;grid-template-columns:250px minmax(260px,1fr) 184px 200px;ga
 .type[data-type=ice]{background:#236a78;color:#d3fcff}.type[data-type=fighting]{background:#9a402e;color:#ffe6d9}.type[data-type=ground]{background:#795725;color:#fff0c2}.type[data-type=bug]{background:#516a28;color:#f1ffd2}.type[data-type=rock]{background:#736137;color:#fff0c5}.type[data-type=dragon]{background:#54409d;color:#ede5ff}.type[data-type=dark]{background:#4a3b52;color:#f0e0fa}.type[data-type=steel]{background:#4b6570;color:#e0f6ff}.type[data-type=fairy]{background:#975080;color:#ffe7f7}
 @media(max-width:1100px) and (min-width:651px){.catalog{max-height:calc(100dvh - 425px)}}
 @media(max-width:650px){.catalog{max-height:none;min-height:0}.catalog-footer{flex-direction:row;justify-content:space-between}#filter,#generation{display:inline-block;width:calc(50% - 5px);margin:10px 0 14px}#filter{margin-right:6px}.evolution img{width:62px;height:62px}.evo-level{min-width:72px}}
+
+.form-picker{margin:16px 0}.form-picker label{display:block;font-size:10px;letter-spacing:1px;color:var(--muted);margin-bottom:8px}.form-picker select{margin:0;background:var(--panel);border-color:var(--line);color:inherit;font-size:11px}
+.form-picker select:disabled{opacity:.65;cursor:default}.form-picker optgroup,.form-picker option{background:var(--bg);color:inherit}
+.image-controls{flex-wrap:wrap;justify-content:flex-end}.image-controls button{font-size:11px}.image-controls button:disabled{opacity:.45;cursor:default}
+#cry[aria-pressed=true]{background:#b7e5fb;color:#143c55}
+.abilities-panel{order:2}.matchups-panel{order:3}.evolution-panel{order:4;grid-column:1/-1}
+.bottom>.panel:first-child{order:1}.abilities-panel{grid-row:1;grid-column:2}.matchups-panel{grid-column:1/-1}
+#abilities-list{display:grid;gap:12px}.ability-card{padding:13px;border:1px solid var(--line);border-radius:10px;background:#7bdaff06}.ability-heading{display:flex;gap:8px;align-items:center;justify-content:space-between}.ability-heading strong{font-size:12px}.hidden-ability{font-size:9px;color:var(--accent);border:1px solid var(--line);border-radius:5px;padding:3px 6px}.ability-card p{font-size:11px;line-height:1.8;margin:9px 0 0;color:var(--muted)}.ability-note{display:block;font-size:9px;margin-top:7px;color:var(--muted)}
+#matchups-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}.matchup-group h3{font-size:11px;font-weight:500;color:var(--muted);margin:0 0 12px}.matchup-chips{display:flex;flex-wrap:wrap;gap:7px}.matchup-chip{font-size:10px;white-space:nowrap;padding:7px 9px}
+.evolution{align-items:stretch;gap:20px}.evo-level{flex:1;min-width:135px;display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));align-content:start;align-items:start;gap:12px}.evo-level-label{grid-column:1/-1;text-align:center}.evo-level button{height:100%;padding:12px 9px}.evo-rule{display:block;margin-top:9px;color:var(--muted);font-size:9px;line-height:1.7;font-weight:400;max-width:220px;overflow-wrap:anywhere}
+@media(max-width:1100px){.abilities-panel{grid-column:auto;grid-row:auto}.matchups-panel,.evolution-panel{grid-column:auto}.bottom{grid-template-columns:1fr}.stage-tag{bottom:58px}}
+@media(max-width:650px){#matchups-list{grid-template-columns:1fr;gap:16px}.evo-level{min-width:135px}.evolution{gap:12px}.image-controls{right:12px;bottom:12px}.image-controls button{padding:8px 10px}}
 </style></head><body>
 <header><div class="brand">POKÉ<b> / </b>FIELD<small>ЭНЦИКЛОПЕДИЯ ПОКЕМОНОВ</small></div><nav class="topnav" aria-label="Разделы"><button id="all" class="active">Покедекс</button><button id="saved">♡ Избранное <span id="fav-count">0</span></button></nav><div class="preferences"><button id="theme-toggle" class="slider-switch" role="switch" aria-checked="false" aria-label="Тёмная тема"><span aria-hidden="true">☀</span><span aria-hidden="true">☾</span></button><button id="language" class="slider-switch language-switch" role="switch" aria-checked="false" aria-label="English language"><span aria-hidden="true">RU</span><span aria-hidden="true">EN</span></button></div><span class="online">Полевой справочник / v.01</span></header>
 <main><aside><div class="eyebrow">Исследуй. Изучай. Открывай.</div><div class="aside-title"><h2>Покедекс</h2><span id="count" class="count"></span></div><input id="search" aria-label="Поиск покемона" placeholder="Поиск по имени или №…" type="search"><select id="filter" aria-label="Фильтр по типу"><option value="">Все типы</option value="grass">Травяной</option><option value="fire">Огненный</option><option value="water">Водный</option><option value="electric">Электрический</option><option value="psychic">Психический</option><option value="ghost">Призрачный</option><option value="normal">Обычный</option></select><select id="generation" aria-label="Поколение"></select><div id="catalog" class="catalog"></div><div class="catalog-footer"><span id="catalog-progress"></span><button id="load-more" type="button">Показать ещё</button></div><div id="status" class="status" role="status"></div></aside>
-<section class="workspace" aria-label="Информация о покемоне"><div class="crumb"><span>ПОКЕДЕКС &nbsp; / &nbsp; КАНТО &nbsp; / &nbsp; <b id="breadcrumb"></b></span><button id="random" style="font-size:11px;padding:8px 12px">↗ Случайный</button></div><div class="hero"><div class="stage"><span id="ghost" class="ghost"></span><img id="hero-img" class="hero-img" alt=""><span class="stage-tag">OFFICIAL ARTWORK — 001</span><div class="image-controls"><button id="shiny" aria-pressed="false">✧ Shiny</button><button id="prev" aria-label="Предыдущий покемон">←</button><button id="next" aria-label="Следующий покемон">→</button></div></div><div class="details"><span id="number" class="number"></span><h1 id="name"></h1><div id="species" class="species"></div><div id="types" class="types"></div><p id="description" class="description"></p><div id="translation-note" class="translation-note" role="status"></div><button id="retry-translation" class="small-retry" hidden>Повторить перевод</button><div id="card-status" class="card-status" role="status"></div><button id="retry-card" class="small-retry" hidden>Повторить</button><div class="measure"><div><strong id="height"></strong><small>РОСТ</small></div><div><strong id="weight"></strong><small>ВЕС</small></div></div><div class="evo-navigation"><button id="evo-prev" aria-label="Предыдущая эволюция">←</button><span id="evo-position"></span><button id="evo-next" aria-label="Следующая эволюция">→</button></div><button id="favorite" class="favorite" aria-pressed="false">♡ В избранное</button></div></div><div class="bottom"><section class="panel"><div class="panel-head"><h2>Базовые характеристики</h2><small id="total"></small></div><div id="stats"></div></section><section class="panel"><div class="panel-head"><h2>Цепочка эволюций</h2><small>ЖИЗНЕННЫЙ ЦИКЛ</small></div><div id="evolution" class="evolution"></div><p class="evo-note">Выбери покемона, чтобы изучить его форму.</p></section></div><footer><span>ДАННЫЕ И ИЛЛЮСТРАЦИИ · POKÉAPI</span><span>← → ПЕРЕКЛЮЧЕНИЕ &nbsp; / &nbsp; НАЙДИ СВОЕГО ПОКЕМОНА</span></footer></section></main>
+<section class="workspace" aria-label="Информация о покемоне"><div class="crumb"><span>ПОКЕДЕКС &nbsp; / &nbsp; КАНТО &nbsp; / &nbsp; <b id="breadcrumb"></b></span><button id="random" style="font-size:11px;padding:8px 12px">↗ Случайный</button></div><div class="hero"><div class="stage"><span id="ghost" class="ghost"></span><img id="hero-img" class="hero-img" alt=""><span class="stage-tag">OFFICIAL ARTWORK — 001</span><div class="image-controls"><button id="cry" aria-pressed="false" disabled>♪ Голос</button><button id="shiny" aria-pressed="false">✧ Shiny</button><button id="prev" aria-label="Предыдущий покемон">←</button><button id="next" aria-label="Следующий покемон">→</button></div></div><div class="details"><span id="number" class="number"></span><h1 id="name"></h1><div id="species" class="species"></div><div id="types" class="types"></div><div class="form-picker"><label id="form-label" for="form-select">Форма покемона</label><select id="form-select"></select></div><p id="description" class="description"></p><div id="translation-note" class="translation-note" role="status"></div><button id="retry-translation" class="small-retry" hidden>Повторить перевод</button><div id="card-status" class="card-status" role="status"></div><button id="retry-card" class="small-retry" hidden>Повторить</button><div class="measure"><div><strong id="height"></strong><small>РОСТ</small></div><div><strong id="weight"></strong><small>ВЕС</small></div></div><div class="evo-navigation"><button id="evo-prev" aria-label="Предыдущая эволюция">←</button><span id="evo-position"></span><button id="evo-next" aria-label="Следующая эволюция">→</button></div><button id="favorite" class="favorite" aria-pressed="false">♡ В избранное</button></div></div><div class="bottom"><section class="panel"><div class="panel-head"><h2>Базовые характеристики</h2><small id="total"></small></div><div id="stats"></div></section><section class="panel evolution-panel"><div class="panel-head"><h2>Цепочка эволюций</h2><small>ЖИЗНЕННЫЙ ЦИКЛ</small></div><div id="evolution" class="evolution"></div><p class="evo-note">Выбери покемона, чтобы изучить его форму.</p></section><section class="panel abilities-panel"><div class="panel-head"><h2 id="abilities-title">Способности</h2></div><div id="abilities-list" role="list"></div></section><section class="panel matchups-panel"><div class="panel-head"><h2 id="matchups-title">Слабости и устойчивости</h2></div><div id="matchups-list"></div><p id="matchups-note" class="evo-note"></p><div id="extras-status" class="card-status" role="status"></div><button id="retry-extras" class="small-retry" hidden>Повторить</button></section></div><footer><span>ДАННЫЕ И ИЛЛЮСТРАЦИИ · POKÉAPI</span><span>← → ПЕРЕКЛЮЧЕНИЕ &nbsp; / &nbsp; НАЙДИ СВОЕГО ПОКЕМОНА</span></footer></section></main>
 <script>
+
 
 'use strict';
 const seedRows=[
@@ -222,7 +235,7 @@ $('generation').replaceChildren(new Option(tr('generation'),''));generationNames
 $('random').textContent=tr('random');$('load-more').textContent=tr('loadMore');$('retry-card').textContent=tr('retry');$('retry-translation').textContent=tr('translationRetry');
 $('prev').setAttribute('aria-label',tr('prev'));$('next').setAttribute('aria-label',tr('next'));document.querySelector('.workspace').setAttribute('aria-label',tr('info'));
 document.querySelectorAll('.measure small').forEach((e,i)=>e.textContent=tr(i?'weight':'height'));document.querySelectorAll('.panel-head h2').forEach((e,i)=>e.textContent=tr(i?'evolution':'stats'));document.querySelector('.panel-head small:not(#total)').textContent=tr('cycle');
-document.querySelectorAll('footer span').forEach((e,i)=>e.textContent=tr(i?'keys':'credits'));syncThemeButton()
+document.querySelectorAll('footer span').forEach((e,i)=>e.textContent=tr(i?'keys':'credits'));syncThemeButton();syncExtrasLabels()
 }
 function renderList(reset=false){
 const scrollTop=$('catalog').scrollTop,scrollLeft=$('catalog').scrollLeft;
@@ -237,8 +250,8 @@ if(!reset){$('catalog').scrollTop=scrollTop;$('catalog').scrollLeft=scrollLeft}
 }
 function more(){limit+=40;renderList()}
 function renderImage(){
-const image=$('hero-img');image.onerror=()=>{if(shiny){shiny=false;status(tr('noShiny'));renderImage()}else{image.onerror=null;image.src=sprite(current.id);status(tr('imageError'))}};
-image.src=art(current.id,shiny);image.alt=(lang==='ru'&&current.ru?current.ru:current.name)+(shiny?' — shiny':'');$('shiny').setAttribute('aria-pressed',String(shiny))
+const image=$('hero-img');image.onerror=()=>{if(shiny){shiny=false;status(tr('noShiny'));renderImage()}else{image.onerror=null;image.src=current.fallbackSprite||sprite(current.formId||current.id);status(tr('imageError'))}};
+image.src=(shiny?current.shinyArtwork:current.artwork)||art(current.formId||current.id,shiny);image.alt=(lang==='ru'&&current.ru?current.ru:current.name)+(shiny?' — shiny':'');$('shiny').setAttribute('aria-pressed',String(shiny))
 }
 function renderCard(){
 const p=current,id=String(p.id).padStart(3,'0'),locale=lang==='ru'?'ru':'en';
@@ -252,7 +265,7 @@ const names=lang==='ru'?['Здоровье','Атака','Защита','Спе�
 names.forEach((name,i)=>{const row=make('div','stat'),bar=make('div','bar'),fill=make('i');fill.style.width=p.stats?p.stats[i]/255*100+'%':'0%';bar.append(fill);row.append(make('span',null,name),make('b',null,p.stats?p.stats[i]:'—'),bar);$('stats').append(row)});
 $('total').textContent=tr('total')+' '+(p.stats?p.stats.reduce((a,b)=>a+b,0):'—');const saved=favorites.includes(p.id);$('favorite').textContent=tr(saved?'saved':'save');$('favorite').setAttribute('aria-pressed',String(saved));
 $('card-status').textContent=detailError?tr('detailError'):detailBusy?tr('loading'):'';$('retry-card').hidden=!detailError;
-renderDescription();renderEvolution()
+renderDescription();renderEvolution();renderForms();renderExtras();syncCry()
 }
 function renderDescription(){
 const p=current;$('retry-translation').hidden=true;let note='';
@@ -269,7 +282,7 @@ $('evo-prev').setAttribute('aria-label',lang==='ru'?'Предыдущая эво
 if(!chain){$('evolution').append(make('p','empty',tr(chainError?'evoError':'evoLoading')));return}
 const node=chain.find(n=>n.id===current.id);$('evo-position').textContent=chain.length===1?tr('noEvo'):tr('stage')+' '+((node?.depth||0)+1);
 $('evo-prev').disabled=!node?.parent;$('evo-next').disabled=!chain.some(n=>n.parent===current.id);
-for(let depth=0;depth<=Math.max(...chain.map(n=>n.depth));depth++){const level=make('div','evo-level');level.append(make('span','evo-level-label',tr('stage')+' '+(depth+1)));chain.filter(n=>n.depth===depth).forEach(n=>{const p=byId.get(n.id);if(!p)return;const btn=make('button');btn.dataset.evolution=String(p.id);btn.setAttribute('aria-pressed',String(p.id===current.id));btn.setAttribute('aria-label',p.name);const img=make('img');img.src=art(p.id);img.alt='';img.loading='lazy';btn.append(img,make('strong',null,p.name),make('small',null,'#'+String(p.id).padStart(3,'0')));btn.onclick=()=>select(p.id);level.append(btn)});$('evolution').append(level)}
+for(let depth=0;depth<=Math.max(...chain.map(n=>n.depth));depth++){const level=make('div','evo-level');level.append(make('span','evo-level-label',tr('stage')+' '+(depth+1)));chain.filter(n=>n.depth===depth).forEach(n=>{const p=byId.get(n.id);if(!p)return;const btn=make('button');btn.dataset.evolution=String(p.id);btn.setAttribute('aria-pressed',String(p.id===current.id));btn.setAttribute('aria-label',p.name);const img=make('img');img.src=art(p.id);img.alt='';img.loading='lazy';btn.append(img,make('strong',null,p.name),make('small',null,'#'+String(p.id).padStart(3,'0')));if(n.parent)btn.append(make('span','evo-rule',tr('stageFrom')+' '+(byId.get(n.parent)?.name||'')+' · '+formatEvolution(n.conditions)));btn.onclick=()=>select(p.id);level.append(btn)});$('evolution').append(level)}
 }
 function moveEvolution(delta){
 const chain=chains.get(current.chainId)||[];if(delta<0){const node=chain.find(n=>n.id===current.id);if(node?.parent)select(node.parent)}
@@ -284,22 +297,24 @@ function cacheGet(key){const value=read(key,null);return value&&Date.now()-value
 function cachePut(key,data){write(key,{at:Date.now(),data})}
 async function loadDetails(p,force=false){
 if(!force&&details.has(p.id))return details.get(p.id);
-const key='pokefield-card-v1-'+p.id,cached=!force&&cacheGet(key);if(cached){details.set(p.id,cached);return cached}
+const key='pokefield-card-v2-'+p.id,cached=!force&&cacheGet(key);if(cached){details.set(p.id,cached);return cached}
 const [body,species]=await Promise.all([api('pokemon/'+p.id+'/'),api('pokemon-species/'+p.id+'/')]);
 const english=species.flavor_text_entries.filter(e=>e.language.name==='en');const source=english.at(-1)?.flavor_text||'';
-const card={height:body.height,weight:body.weight,stats:body.stats.map(s=>s.base_stat),types:body.types.map(t=>t.type.name),descriptionEn:source.replace(/[\n\f\r]+/g,' ').replace(/\s+/g,' ').trim(),speciesEn:species.genera.find(g=>g.language.name==='en')?.genus||'',chainId:species.evolution_chain?Number(species.evolution_chain.url.split('/').filter(Boolean).at(-1)):null};
+const card={...bodyDetails(body),varieties:species.varieties.map(v=>({id:resourceId(v.pokemon.url),slug:v.pokemon.name,isDefault:v.is_default})),descriptionEn:source.replace(/[\n\f\r]+/g,' ').replace(/\s+/g,' ').trim(),speciesEn:species.genera.find(g=>g.language.name==='en')?.genus||'',chainId:species.evolution_chain?Number(species.evolution_chain.url.split('/').filter(Boolean).at(-1)):null};
 cachePut(key,card);details.set(p.id,card);return card
 }
 async function loadChain(chainId,force=false){
 if(!chainId)return;if(!force&&chains.has(chainId))return;
-const key='pokefield-evolution-v1-'+chainId;let chain=!force&&cacheGet(key);
-if(!chain){const response=await api('evolution-chain/'+chainId+'/');chain=[];function walk(node,parent=null,depth=0){const id=Number(node.species.url.split('/').filter(Boolean).at(-1));if(byId.has(id))chain.push({id,parent,depth});node.evolves_to.forEach(child=>walk(child,id,depth+1))}walk(response.chain);cachePut(key,chain)}
+const key='pokefield-evolution-v2-'+chainId;let chain=!force&&cacheGet(key);
+if(!chain){const response=await api('evolution-chain/'+chainId+'/');chain=[];function walk(node,parent=null,depth=0){const id=Number(node.species.url.split('/').filter(Boolean).at(-1));if(byId.has(id))chain.push({id,parent,depth,conditions:node.evolution_details||[]});node.evolves_to.forEach(child=>walk(child,id,depth+1))}walk(response.chain);cachePut(key,chain)}
 chains.set(chainId,chain)
 }
-async function select(id,force=false){
-const p=byId.get(id);if(!p)return;current=p;shiny=false;const version=++selectionVersion;detailBusy=true;detailError=false;chainBusy=true;chainError=false;status();renderImage();renderCard();renderList();
-try{const card=await loadDetails(p,force);const seed=seeds.get(p.id);Object.assign(p,card);if(seed){p.descriptionRu=seed.descriptionRu;p.speciesRu=seed.speciesRu}
-if(version!==selectionVersion)return;detailBusy=false;renderCard();
+async function select(id,force=false,formChoice=null){
+const base=byId.get(id);if(!base)return;stopCry();const p={...base};current=p;shiny=false;const version=++selectionVersion;detailBusy=true;detailError=false;chainBusy=true;chainError=false;status();renderImage();renderCard();renderList();
+try{const card=await loadDetails(p,force);const seed=seeds.get(p.id);Object.assign(p,card);p.defaultBodyId=card.formId;
+if(formChoice){const bodyId=Number(formChoice.bodyId);if(!p.varieties.some(v=>v.id===bodyId))throw new Error('Unknown form');if(bodyId!==card.formId)Object.assign(p,await loadVariant(bodyId,force));if(formChoice.cosmeticId){const cosmeticId=Number(formChoice.cosmeticId);if(!p.cosmeticForms.some(f=>f.id===cosmeticId))throw new Error('Unknown cosmetic form');const cosmetic=await api('pokemon-form/'+cosmeticId+'/');p.cosmeticId=cosmeticId;p.formSlug=cosmetic.name;p.types=cosmetic.types.map(t=>t.type.name);p.artwork=cosmetic.sprites.front_default||p.artwork;p.shinyArtwork=cosmetic.sprites.front_shiny||null;p.fallbackSprite=p.artwork;p.formLabel=localizedForm(cosmetic.name)}}
+if(seed){p.descriptionRu=seed.descriptionRu;p.speciesRu=seed.speciesRu}
+if(version!==selectionVersion)return;detailBusy=false;renderImage();renderCard();void loadExtras(p,force);
 try{await loadChain(p.chainId,force)}catch{if(version===selectionVersion)chainError=true}
 if(version!==selectionVersion)return;chainBusy=false;renderEvolution();$('retry-card').hidden=!chainError
 }catch{if(version!==selectionVersion)return;detailBusy=false;detailError=true;chainBusy=false;chainError=true;renderCard()}
@@ -324,6 +339,98 @@ $('theme-toggle').onclick=()=>{const theme=document.documentElement.dataset.them
 $('language').onclick=()=>{lang=lang==='en'?'ru':'en';try{localStorage.setItem('pokefield-language',lang)}catch{}status();syncStatic();renderCard();renderList();$('hero-img').alt=(lang==='ru'&&current.ru?current.ru:current.name)+(shiny?' — shiny':'')};
 $('evo-prev').onclick=()=>moveEvolution(-1);$('evo-next').onclick=()=>moveEvolution(1);$('retry-card').onclick=()=>select(current.id,true);$('retry-translation').onclick=()=>{current.translationError=false;void translate(current,true);renderDescription()};
 document.addEventListener('keydown',event=>{if(/INPUT|SELECT|TEXTAREA/.test(event.target.tagName)||event.target.closest?.('[role="switch"]')||event.altKey||event.ctrlKey||event.metaKey)return;if(event.key==='ArrowLeft'){event.preventDefault();step(-1)}if(event.key==='ArrowRight'){event.preventDefault();step(1)}});
+
+
+
+
+/* Detailed cards: forms, cries, abilities, type matchups and evolution rules. */
+Object.assign(extraText.ru,{abilities:'Способности',hiddenAbility:'Скрытая',forms:'Форма покемона',defaultForm:'Основная форма',cosmeticForms:'Косметические формы',varietyForms:'Разновидности',cry:'♪ Голос',stopCry:'■ Стоп',noCry:'Звук недоступен',cryError:'Не удалось воспроизвести звук. Попробуй ещё раз.',matchups:'Слабости и устойчивости',weaknesses:'Слабости',resistances:'Устойчивости',immunities:'Иммунитет',none:'Нет',typeNote:'Множители урона рассчитаны по типам. Способности и эффекты боя не учитываются.',extrasError:'Часть данных не загрузилась.',abilityUnavailable:'Описание способности недоступно.',sourceEnglish:'Английский оригинал · перевод недоступен',autoTranslation:'Автоперевод',evolutionUnknown:'Условия не указаны в API',stageFrom:'Из',or:'или'});
+Object.assign(extraText.en,{abilities:'Abilities',hiddenAbility:'Hidden',forms:'Pokémon form',defaultForm:'Default form',cosmeticForms:'Cosmetic forms',varietyForms:'Varieties',cry:'♪ Cry',stopCry:'■ Stop',noCry:'Cry unavailable',cryError:'Could not play the cry. Please try again.',matchups:'Type matchups',weaknesses:'Weaknesses',resistances:'Resistances',immunities:'Immunities',none:'None',typeNote:'Damage multipliers are based on types. Abilities and battle effects are not included.',extrasError:'Some details could not be loaded.',abilityUnavailable:'Ability description unavailable.',sourceEnglish:'English original · translation unavailable',autoTranslation:'Auto-translated',evolutionUnknown:'Conditions not specified in API',stageFrom:'From',or:'or'});
+extraText.ru.evoNote='Выбери покемона, чтобы изучить его форму. Условия эволюции могут зависеть от версии игры.';
+extraText.en.evoNote='Select a Pokémon to explore its form. Evolution requirements may depend on the game version.';
+const abilityNamesRu={overgrow:'Разрастание',blaze:'Пламя',torrent:'Поток',static:'Статика','lightning-rod':'Громоотвод','solar-power':'Солнечная сила','tough-claws':'Крепкие когти',levitate:'Левитация',intimidate:'Запугивание','wonder-guard':'Чудо-защита',adaptability:'Адаптация','run-away':'Побег','chlorophyll':'Хлорофилл'};
+const abilityCache=new Map(),typeCache=new Map(),variantCache=new Map();
+let activeAudio=null,cryPlaying=false;
+function resourceId(url){return Number(url.split('/').filter(Boolean).at(-1))}
+function bodyDetails(body){const official=body.sprites?.other?.['official-artwork'];return {formId:body.id,bodySlug:body.name,formSlug:body.name,height:body.height,weight:body.weight,stats:body.stats.map(s=>s.base_stat),types:body.types.map(t=>t.type.name),abilities:body.abilities.map(a=>({slug:a.ability.name,isHidden:a.is_hidden})),cry:body.cries?.latest||body.cries?.legacy||null,artwork:official?.front_default||body.sprites?.front_default||null,shinyArtwork:official?.front_shiny||body.sprites?.front_shiny||null,fallbackSprite:body.sprites?.front_default||null,cosmeticForms:(body.forms||[]).map(f=>({id:resourceId(f.url),slug:f.name}))}}
+async function loadVariant(id,force=false){if(!force&&variantCache.has(id))return variantCache.get(id);const key='pokefield-variant-v1-'+id;let data=!force&&cacheGet(key);if(!data){data=bodyDetails(await api('pokemon/'+id+'/'));cachePut(key,data)}variantCache.set(id,data);return data}
+function localizedForm(slug){if(lang==='en')return pretty(slug);const names={mega:'Мега',gmax:'Гигантамакс',alola:'Алола',galar:'Галар',hisui:'Хисуи',paldea:'Палдея',origin:'Первородная',therian:'Тотемная',incarnate:'Воплощённая',primal:'Первобытная',attack:'Атака',defense:'Защита',speed:'Скорость',normal:'Обычная',male:'Самец',female:'Самка',sunny:'Солнечная',rainy:'Дождевая',snowy:'Снежная',wash:'Стиральная',heat:'Тепловая',frost:'Морозильная',fan:'Вентилятор',mow:'Газонокосилка',small:'Малая',large:'Большая',super:'Огромная',average:'Средняя'};return slug.split('-').map(word=>names[word]||pretty(word)).join(' ')}
+function renderForms(){
+const p=current,select=$('form-select');select.replaceChildren();
+const variants=p.varieties||[{id:p.formId||p.id,slug:p.slug,isDefault:true}];const group=make('optgroup');group.label=tr('varietyForms');variants.forEach(v=>{const label=v.isDefault?tr('defaultForm')+' · '+localizedForm(v.slug):localizedForm(v.slug);group.append(new Option(label,'pokemon:'+v.id))});select.append(group);
+const extra=(p.cosmeticForms||[]).filter(f=>f.slug!==p.bodySlug||p.cosmeticId===f.id);if(extra.length){const cosmetics=make('optgroup');cosmetics.label=tr('cosmeticForms');extra.forEach(f=>cosmetics.append(new Option(localizedForm(f.slug),'form:'+f.id+':'+p.formId)));select.append(cosmetics)}
+select.value=p.cosmeticId?'form:'+p.cosmeticId+':'+p.formId:'pokemon:'+(p.formId||p.id);select.disabled=detailBusy||(variants.length<2&&!extra.length);$('form-label').textContent=tr('forms');select.setAttribute('aria-label',tr('forms'))
+}
+function syncExtrasLabels(){$('abilities-title').textContent=tr('abilities');$('matchups-title').textContent=tr('matchups');$('matchups-note').textContent=tr('typeNote');$('retry-extras').textContent=tr('retry');$('form-label').textContent=tr('forms')}
+async function translatedText(source,tag){
+const key='pokefield-text-ru-v1-'+tag+'-'+hash(source),cached=read(key,null);if(typeof cached==='string'&&cached)return cached;
+if(translationRequests.has(key))return translationRequests.get(key);
+const promise=(async()=>{const result=await getJSON('https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ru&dt=t&q='+encodeURIComponent(source));const value=Array.isArray(result?.[0])?result[0].map(part=>part[0]||'').join(''):'';if(!value)throw new Error('No translation');write(key,value);return value})();
+translationRequests.set(key,promise);try{return await promise}finally{translationRequests.delete(key)}
+}
+async function getAbility(slug,force=false){
+if(!force&&abilityCache.has(slug))return abilityCache.get(slug);const key='pokefield-ability-v1-'+slug;let data=!force&&cacheGet(key);
+if(!data){const source=await api('ability/'+slug+'/');data={slug,name:source.names.find(n=>n.language.name==='en')?.name||pretty(slug),description:source.effect_entries.find(e=>e.language.name==='en')?.short_effect||source.flavor_text_entries.filter(e=>e.language.name==='en').at(-1)?.flavor_text?.replace(/[\n\f\r]+/g,' ')||''};cachePut(key,data)}abilityCache.set(slug,data);return data
+}
+async function getType(type,force=false){if(!force&&typeCache.has(type))return typeCache.get(type);const key='pokefield-type-v1-'+type;let data=!force&&cacheGet(key);if(!data){data=(await api('type/'+type+'/')).damage_relations;cachePut(key,data)}typeCache.set(type,data);return data}
+function calculateMatchups(relations){const damage=Object.fromEntries(Object.keys(ruTypes).map(t=>[t,1]));relations.forEach(r=>{r.double_damage_from.forEach(t=>damage[t.name]*=2);r.half_damage_from.forEach(t=>damage[t.name]*=.5);r.no_damage_from.forEach(t=>damage[t.name]=0)});return damage}
+async function loadExtras(p,force=false){
+if(p.extrasPromise&&!force)return p.extrasPromise;p.extrasLoading=true;p.extrasError=false;if(current===p)renderExtras();
+const promise=(async()=>{const [abilities,types]=await Promise.all([Promise.allSettled((p.abilities||[]).map(a=>getAbility(a.slug,force))),Promise.allSettled(p.types.map(t=>getType(t,force)))]);
+p.abilityData=(p.abilities||[]).map((a,i)=>({...a,...(abilities[i]?.status==='fulfilled'?abilities[i].value:{name:pretty(a.slug),description:'',error:true})}));
+p.extrasError=abilities.some(a=>a.status==='rejected')||types.some(t=>t.status==='rejected');
+p.matchups=types.every(t=>t.status==='fulfilled')?calculateMatchups(types.map(t=>t.value)):null;p.extrasLoading=false;if(current===p)renderExtras()})();
+p.extrasPromise=promise;try{await promise}finally{p.extrasPromise=null}
+}
+function renderExtras(){
+syncExtrasLabels();const p=current;$('abilities-list').replaceChildren();$('matchups-list').replaceChildren();$('extras-status').textContent=p.extrasError?tr('extrasError'):'';$('retry-extras').hidden=!p.extrasError;
+if(!p.abilityData){$('abilities-list').append(make('p','empty',tr(detailError?'detailError':'loading')))}else p.abilityData.forEach(a=>{
+const box=make('article','ability-card'),heading=make('div','ability-heading'),name=make('strong',null,lang==='ru'?abilityNamesRu[a.slug]||a.name:a.name),effect=make('p',null,a.description||tr('abilityUnavailable')),note=make('small','ability-note');
+heading.append(name);if(a.isHidden)heading.append(make('span','hidden-ability',tr('hiddenAbility')));box.setAttribute('role','listitem');box.append(heading,effect,note);$('abilities-list').append(box);
+if(lang==='ru'&&a.description){note.textContent=tr('translating');const target=p;
+void translatedText(a.description,'ability-'+a.slug).then(value=>{if(current===target&&lang==='ru'){effect.textContent=value;note.textContent=tr('autoTranslation')}}).catch(()=>{if(current===target&&lang==='ru')note.textContent=tr('sourceEnglish')});
+if(!abilityNamesRu[a.slug])void translatedText(a.name,'ability-name-'+a.slug).then(value=>{if(current===target&&lang==='ru')name.textContent=value}).catch(()=>{})
+}});
+if(!p.matchups){$('matchups-list').append(make('p','empty',tr(p.extrasError?'extrasError':detailError?'detailError':'loading')));return}
+const groups=[['weaknesses',v=>v>1],['resistances',v=>v>0&&v<1],['immunities',v=>v===0]];
+groups.forEach(([key,test])=>{const row=make('div','matchup-group');row.append(make('h3',null,tr(key)));const values=make('div','matchup-chips'),entries=Object.entries(p.matchups).filter(([t,v])=>test(v)).sort((a,b)=>b[1]-a[1]);if(!entries.length)values.append(make('span','empty',tr('none')));entries.forEach(([type,value])=>{const chip=make('span','type matchup-chip',typeLabel(type)+' ×'+value.toLocaleString(lang));chip.dataset.type=type;values.append(chip)});row.append(values);$('matchups-list').append(row)})
+}
+function syncCry(){const enabled=!!current.cry&&!detailBusy;$('cry').disabled=!enabled;$('cry').textContent=tr(cryPlaying?'stopCry':'cry');$('cry').title=enabled?tr('cry'):tr('noCry');$('cry').setAttribute('aria-label',tr(cryPlaying?'stopCry':enabled?'cry':'noCry'));$('cry').setAttribute('aria-pressed',String(cryPlaying))}
+function stopCry(){if(activeAudio){activeAudio.pause();try{activeAudio.currentTime=0}catch{}}activeAudio=null;cryPlaying=false;if($('cry'))syncCry()}
+async function playCry(){if(activeAudio){stopCry();return}if(!current.cry)return;const p=current,audio=new Audio(p.cry);activeAudio=audio;cryPlaying=true;syncCry();audio.addEventListener('ended',()=>{if(activeAudio===audio)stopCry()});audio.addEventListener('error',()=>{if(activeAudio===audio){stopCry();status(tr('cryError'))}});
+try{await audio.play();if(current!==p&&activeAudio===audio)stopCry()}catch{if(activeAudio===audio){stopCry();status(tr('cryError'))}}
+}
+function evolutionValue(value){if(typeof value==='object')return value?.name?pretty(value.name):JSON.stringify(value);return String(value)}
+function formatEvolution(conditions){
+if(!conditions?.length)return tr('evolutionUnknown');const ru=lang==='ru',type=t=>ru?ruTypes[t]||pretty(t):pretty(t);
+const itemsRu={'fire-stone':'Огненный камень','water-stone':'Водный камень','thunder-stone':'Громовой камень','leaf-stone':'Лиственный камень','moon-stone':'Лунный камень','sun-stone':'Солнечный камень','ice-stone':'Ледяной камень','dawn-stone':'Рассветный камень','dusk-stone':'Сумеречный камень','shiny-stone':'Сияющий камень','metal-coat':'Металлическое покрытие','kings-rock':'Королевский камень'};
+const item=i=>ru?itemsRu[i.name]||pretty(i.name):pretty(i.name);
+const triggerRu={'level-up':'Повышение уровня','use-item':'Использовать предмет',trade:'Обмен',shed:'Свободное место в команде и покебол',spin:'Вращение','tower-of-darkness':'Башня тьмы','tower-of-waters':'Башня вод','three-critical-hits':'3 критических попадания за бой','take-damage':'Получить урон','agile-style-move':'Приём в быстром стиле','strong-style-move':'Приём в мощном стиле','recoil-damage':'Урон от отдачи',other:'Особое условие'};
+const known=new Set(['trigger','min_level','item','held_item','min_happiness','min_beauty','min_affection','time_of_day','known_move','known_move_type','location','needs_overworld_rain','party_species','party_type','relative_physical_stats','trade_species','turn_upside_down','gender']);
+return conditions.map(c=>{const parts=[];const trigger=c.trigger?.name;
+if(trigger)parts.push(ru?triggerRu[trigger]||pretty(trigger):pretty(trigger));
+if(c.min_level!==null&&c.min_level!==undefined)parts.push((ru?'Уровень ':'Level ')+c.min_level+'+');
+if(c.item)parts.push(item(c.item));if(c.held_item)parts.push((ru?'Держит: ':'Holding: ')+item(c.held_item));
+if(c.min_happiness!=null)parts.push((ru?'Дружба ≥ ':'Friendship ≥ ')+c.min_happiness);
+if(c.min_beauty!=null)parts.push((ru?'Красота ≥ ':'Beauty ≥ ')+c.min_beauty);
+if(c.min_affection!=null)parts.push((ru?'Привязанность ≥ ':'Affection ≥ ')+c.min_affection);
+if(c.time_of_day)parts.push(ru?({day:'Днём',night:'Ночью',dusk:'В сумерках'}[c.time_of_day]||c.time_of_day):pretty(c.time_of_day));
+if(c.known_move)parts.push((ru?'Знает приём: ':'Knows move: ')+pretty(c.known_move.name));
+if(c.known_move_type)parts.push((ru?'Знает приём типа: ':'Knows move type: ')+type(c.known_move_type.name));
+if(c.location)parts.push((ru?'Место: ':'Location: ')+pretty(c.location.name));
+if(c.needs_overworld_rain)parts.push(ru?'Дождь в мире':'Overworld rain');
+if(c.party_species)parts.push((ru?'В команде: ':'Party includes: ')+pretty(c.party_species.name));
+if(c.party_type)parts.push((ru?'Тип в команде: ':'Party type: ')+type(c.party_type.name));
+if(c.relative_physical_stats!=null)parts.push(ru?({'-1':'Атака < защиты','0':'Атака = защите','1':'Атака > защиты'}[c.relative_physical_stats]||String(c.relative_physical_stats)):({'-1':'Attack < Defense','0':'Attack = Defense','1':'Attack > Defense'}[c.relative_physical_stats]||String(c.relative_physical_stats)));
+if(c.trade_species)parts.push((ru?'Обмен на: ':'Trade for: ')+pretty(c.trade_species.name));
+if(c.turn_upside_down)parts.push(ru?'Перевернуть устройство':'Turn device upside down');
+if(c.gender)parts.push(c.gender===1?(ru?'Самка':'Female'):(ru?'Самец':'Male'));
+Object.entries(c).forEach(([key,value])=>{if(!known.has(key)&&value!==null&&value!==undefined&&value!==false&&value!=='')parts.push(pretty(key.replaceAll('_','-'))+': '+evolutionValue(value))});
+return parts.join(' · ')||tr('evolutionUnknown')
+}).join(' '+tr('or')+' ')
+}
+$('form-select').onchange=()=>{const parts=$('form-select').value.split(':');const choice=parts[0]==='form'?{bodyId:Number(parts[2]),cosmeticId:Number(parts[1])}:{bodyId:Number(parts[1])};void select(current.id,false,choice)};
+$('cry').onclick=playCry;$('retry-extras').onclick=()=>void loadExtras(current,true);
 syncStatic();renderList();void select(current.id);
 
 </script></body></html>
